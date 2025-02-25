@@ -11,23 +11,28 @@ const authContext = ({children}) => {
         try {
           const token = localStorage.getItem('token')
           if(token){
-            const response = await axios.get('http://localhost:5000/api/auth/verify', {
-              headers :{
-                "Authorization": `Bearer${token}`
+            const response = await axios.get('http://localhost:5000/api/auth/verify', 
+              {
+                headers :{
+                  "Authorization": `Bearer ${token}`
+                },
               }
-            })
+            );
+            console.log(response)
             if(response.data.success){
               setUser(response.data.user)
             }
-          }else {
+          }else {      
             setUser(null)
+            setLoading(false)
           }
         } catch(error){
+          console.log(error)
           if(error.response && !error.response.data.error) {
             setUser(null)
           }
         } finally{
-          setLoading(false)
+          setLoading(false);
         }
       }
       verifyUser()
