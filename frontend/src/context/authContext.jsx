@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSocket } from './socketContext';
 
-const userContext = createContext()
+const userContext = createContext();
 
 const authContext = ({children}) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
+    const socket = useSocket();
     useEffect(() => {
       const verifyUser = async () => {
         try {
@@ -20,11 +22,14 @@ const authContext = ({children}) => {
             );
             console.log(response)
             if(response.data.success){
-              setUser(response.data.user)
+              setUser(response.data.user);
+              if (socket) {
+                socket.emit('login', { employeeName: response.data.user.name, loginTime: new Date(), role: response.data.user.role });
+              }
             }
           }else {      
-            setUser(null)
-            setLoading(false)
+            setUser(null);
+            setLoading(false);
           }
         } catch(error){
           console.log(error)
@@ -36,14 +41,17 @@ const authContext = ({children}) => {
         }
       }
       verifyUser()
-    },[]);
+    },[socket]);
     const login = (user) =>{
-        setUser(user)
+        setUser(user);
     }
     const logout = () => {
-        setUser(null)
-        localStorage.removeItem("token")
-    }
+      if (socket && user) {
+        socket.emit('logout', { employeeName: user.name, logoutTime: new Date(), role: user.role });
+      }
+      setUser(null);
+      localStorage.removeItem("token");
+    };
   return (
     <userContext.Provider value={{user, login, logout, loading}}>
         {children}

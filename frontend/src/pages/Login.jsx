@@ -21,7 +21,7 @@ const Login = () => {
             navigate("/admin-dashboard")
             console.log(response.data.user)
           } else {
-            navigate("/employ-dashboard")
+            navigate("/employee-dashboard")
           }
         }
       } catch(error){

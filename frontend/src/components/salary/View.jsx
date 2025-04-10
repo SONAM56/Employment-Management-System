@@ -60,14 +60,14 @@ const View = () => {
                 {/* border-b dark:bg-gray-800 dark:border-gray-700 text-white */}
                 <tbody>
                     {filteredSalaries.map((salary) => (
-                        <tr key={salary.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-white'>
+                        <tr key={salary.id} className='bg-white border-b bg-slate-600 border-gray-700 text-white'>
                             <td className='px-6 py-3'>{sno++}</td>
                             <td className='px-6 py-3'>{salary.employeeId.employeeId}</td>
                             <td className='px-6 py-3'>{salary.basicSalary}</td>
                             <td className='px-6 py-3'>{salary.allowances}</td>
                             <td className='px-6 py-3'>{salary.deductions}</td>
                             <td className='px-6 py-3'>{salary.netSalary}</td>
-                            <td className='px-6 py-3'>{new Date(salary.payDate).toLocaleString()}</td>
+                            <td className='px-6 py-3'>{new Date(salary.payDate).toLocaleDateString()}</td>
                         </tr>       
                     ))}
                 </tbody>

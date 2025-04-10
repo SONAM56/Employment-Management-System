@@ -13,14 +13,14 @@ const List = () => {
     const fetchEmployees = async () =>{
       setEmpLoading(true)
       try{
-        const response = await axios.get('http://localhost:5000/api/employee',{
+        const responnse = await axios.get('http://localhost:5000/api/employee',{
           headers : {
             Authorization : `Bearer ${localStorage.getItem('token')}`,
           },
         })
-        if(response.data.success){
+        if(responnse.data.success){
           let sno = 1;
-          const data = await response.data.employees.map((emp) => (
+          const data = await responnse.data.employees.map((emp) => (
             {
               _id: emp._id,
               sno: sno++,
@@ -34,7 +34,6 @@ const List = () => {
           setEmployees(data);
           setFilteredEmployees(data);
         }
-        console.log(response.data)
       } catch(error){
         if(error.response && !error.response.data.success){
           alert(error.response.data.error)
