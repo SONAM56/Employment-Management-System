@@ -23,9 +23,7 @@ const authContext = ({children}) => {
             console.log(response)
             if(response.data.success){
               setUser(response.data.user);
-              if (socket) {
-                socket.emit('login', { employeeName: response.data.user.name, loginTime: new Date(), role: response.data.user.role });
-              }
+              emitLoginEvent(response.data.user);
             }
           }else {      
             setUser(null);
@@ -41,12 +39,25 @@ const authContext = ({children}) => {
         }
       }
       verifyUser()
-    },[socket]);
+      // Cleanup function to avoid memory leaks
+      return () => {
+          if (socket) {
+              socket.off('login');
+          }
+      };
+    },[]);
+    const emitLoginEvent = (user) => {
+        if (socket && user) {
+            socket.emit('login', {
+                employeeName: user.name,
+                loginTime: new Date(),
+                role: user.role,
+            });
+        }
+    };
     const login = (user) =>{
         setUser(user);
-        if (socket) {
-          socket.emit('login', { employeeName: user.name, loginTime: new Date(), role: user.role });
-        }
+        emitLoginEvent(user);
     }
     const logout = () => {
       if (socket && user) {
