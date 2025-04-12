@@ -17,12 +17,7 @@ const Login = () => {
         if(response.data.success){
           login(response.data.user)
           localStorage.setItem("token", response.data.token)
-          if(response.data.user.role === "admin"){
-            navigate("/admin-dashboard")
-            console.log(response.data.user)
-          } else {
-            navigate("/employee-dashboard")
-          }
+          navigate(response.data.user.role === "admin" ? "/admin-dashboard" : "/employee-dashboard");
         }
       } catch(error){
         if(error.response && !error.response.data.success){

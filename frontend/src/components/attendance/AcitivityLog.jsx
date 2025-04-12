@@ -1,9 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useSocket } from '../../context/socketContext';
-
+import axios from 'axios';
 const ActivityLog = () => {
     const socket = useSocket();
     const [logs, setLogs] = useState([]);
+
+    // Fetch logs from the server when the component mounts
+    useEffect(() => {
+        const fetchLogs = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/activity-log');
+                setLogs(response.data);
+            } catch (error) {
+                console.error('Error fetching logs:', error);
+            }
+        };
+
+        fetchLogs();
+    }, []);
+
 
     useEffect(() => {
         if (socket) {

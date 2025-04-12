@@ -44,6 +44,9 @@ const authContext = ({children}) => {
     },[socket]);
     const login = (user) =>{
         setUser(user);
+        if (socket) {
+          socket.emit('login', { employeeName: user.name, loginTime: new Date(), role: user.role });
+        }
     }
     const logout = () => {
       if (socket && user) {

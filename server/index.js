@@ -11,7 +11,7 @@ import http from 'http';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import initializeSocket from './socket.js';
-
+import activityLogRouter from './routes/activityLog.js';
 connectToDatabase();
 
 const app = express();
@@ -34,7 +34,7 @@ app.use('/api/department', departmentRouter)
 app.use('/api/employee', employeeRouter)
 app.use('/api/salary', salaryRouter)
 app.use('/api/leave', leaveRouter)
-
+app.use('/api/activity-log', activityLogRouter);
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, ()=>{
     console.log(`Server is Running on port ${process.env.PORT}`)
