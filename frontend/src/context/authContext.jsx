@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSocket } from './socketContext';
+import moment from 'moment-timezone';
 
 const userContext = createContext();
 
@@ -48,9 +49,20 @@ const authContext = ({children}) => {
     },[]);
     const emitLoginEvent = (user) => {
         if (socket && user) {
+            const nepaliTime = moment().tz('Asia/Kathmandu').toDate();
             socket.emit('login', {
                 employeeName: user.name,
-                loginTime: new Date(),
+                loginTime: nepaliTime,
+                role: user.role,
+            });
+        }
+    };
+    const emitLogoutEvent = (user) => {
+        if (socket && user) {
+            const nepaliTime = moment().tz('Asia/Kathmandu').toDate(); // Convert to Nepali time
+            socket.emit('logout', {
+                employeeName: user.name,
+                logoutTime: nepaliTime,
                 role: user.role,
             });
         }
@@ -61,7 +73,7 @@ const authContext = ({children}) => {
     }
     const logout = () => {
       if (socket && user) {
-        socket.emit('logout', { employeeName: user.name, logoutTime: new Date(), role: user.role });
+        emitLogoutEvent(user);
       }
       setUser(null);
       localStorage.removeItem("token");

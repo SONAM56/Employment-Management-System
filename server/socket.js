@@ -9,7 +9,7 @@ const initializeSocket = (server) => {
             allowedHeaders: ['Authorization'],
             credentials: true,              // Allow cookies and credentials
         },
-        transports: ['websocket', 'polling'],
+        transports: ['websocket', 'polling'], 
     });
 
     io.on('connection', (socket) => {
