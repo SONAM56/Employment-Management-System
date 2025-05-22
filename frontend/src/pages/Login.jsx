@@ -1,19 +1,20 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
     const {login} =  useAuth()
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const {baseUrl} = useAuth();
 
 
     const handleSubmit = async (e) => {
       e.preventDefault() 
       try{
-        const response = await axios.post("http://localhost:5000/api/auth/login", {email, password});
+        const response = await axios.post(`${baseUrl}/api/auth/login`, {email, password});
         if(response.data.success){
           login(response.data.user)
           localStorage.setItem("token", response.data.token)
@@ -49,8 +50,14 @@ const Login = () => {
               <input type="checkbox" className='from-checkbox' />
               <span className='ml-2 text-gray-700'>Remember me</span>
             </label>
-            <a href="#" className='text-teal-600'>Forgot password?</a>
+            <Link to={"/login/forgot"} className='text-teal-600'>Forgot password?</Link>
           </div>
+          {/* <div className='mb-4 flex items-center justify-between'>
+            <label className='inline-flex items-center'>
+              Don't have an account? <Link  to={"/signup"} className='ml-2  text-blue-500'>Signup</Link >
+            </label>
+           
+          </div> */}
           <div className='mb-4'>
             <button type='submit'className='w-full bg-teal-600 text-white py-2'>Login</button>
           </div>

@@ -9,12 +9,13 @@ const authContext = ({children}) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const socket = useSocket();
+    const baseUrl = import.meta.env.BACKEND_URL || "http://localhost:5000"
     useEffect(() => {
       const verifyUser = async () => {
         try {
           const token = localStorage.getItem('token')
           if(token){
-            const response = await axios.get('http://localhost:5000/api/auth/verify', 
+            const response = await axios.get(`${baseUrl}/api/auth/verify`, 
               {
                 headers :{
                   "Authorization": `Bearer ${token}`
@@ -51,6 +52,7 @@ const authContext = ({children}) => {
         if (socket && user) {
             const nepaliTime = moment().tz('Asia/Kathmandu').toDate();
             socket.emit('login', {
+                userId: user._id,
                 employeeName: user.name,
                 loginTime: nepaliTime,
                 role: user.role,
@@ -61,6 +63,7 @@ const authContext = ({children}) => {
         if (socket && user) {
             const nepaliTime = moment().tz('Asia/Kathmandu').toDate(); // Convert to Nepali time
             socket.emit('logout', {
+                userId: user._id,
                 employeeName: user.name,
                 logoutTime: nepaliTime,
                 role: user.role,
@@ -79,7 +82,7 @@ const authContext = ({children}) => {
       localStorage.removeItem("token");
     };
   return (
-    <userContext.Provider value={{user, login, logout, loading}}>
+    <userContext.Provider value={{user, login, logout, loading, baseUrl}}>
         {children}
     </userContext.Provider>
   )

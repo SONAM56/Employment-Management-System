@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { fetchDepartments } from '../../../utils/EmployeeHelper';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/authContext';
 import axios from 'axios';
 const Add = () => {
     const [departments, setDepartments] = useState([]);
     const [formData, setFormData] = useState({});
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const {user} = useAuth();
+    const {baseUrl} = useAuth();
+    console.log(user);
     useEffect(()=> {
         const getDepartments = async () => {
             const departments = await fetchDepartments();
@@ -30,7 +34,7 @@ const Add = () => {
             formDataObj.append(key, formData[key])
         })
         try {
-            const response = await axios.post('http://localhost:5000/api/employee/add', formDataObj, {
+            const response = await axios.post(`${baseUrl}/api/employee/add`, formDataObj, {
                 headers : {
                     Authorization : `Bearer ${localStorage.getItem('token')}`
                 },
@@ -118,7 +122,9 @@ const Add = () => {
                     <label htmlFor="role"className='block text-sm font-medium text-gray-700'>Role</label>
                     <select name="role" onChange={handleChange} className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required>
                         <option value="">Select Role</option>
-                        <option value="admin">Admin</option>
+                        {
+                            user.role ===   "superadmin" && <option value="admin">Admin</option>
+                        }
                         <option value="employee">Employee</option>
                     </select>
                 </div>

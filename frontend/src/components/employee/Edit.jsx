@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchDepartments } from '../../../utils/EmployeeHelper';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../../context/authContext';
 const Edit = () => {
     const [employee, setEmployee] = useState({
         name: '',
@@ -13,6 +14,7 @@ const Edit = () => {
     const [departments, setDepartments] = useState([]);
     const navigate = useNavigate();
     const {id} = useParams();
+    const {baseUrl} = useAuth();
 
     useEffect(()=> {
         const getDepartments = async () => {
@@ -24,7 +26,7 @@ const Edit = () => {
     useEffect(()=> {
         const fetchEmployee = async () =>{
             try{
-                const responnse = await axios.get(`http://localhost:5000/api/employee/${id}`,{
+                const responnse = await axios.get(`${baseUrl}/api/employee/${id}`,{
                     headers : {
                         Authorization : `Bearer ${localStorage.getItem('token')}`,
                     },
@@ -56,7 +58,7 @@ const Edit = () => {
     const handleSubmit = async (e) =>{
         e.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:5000/api/employee/${id}`, employee, {
+            const response = await axios.put(`${baseUrl}/api/employee/${id}`, employee, {
                 headers : {
                     Authorization : `Bearer ${localStorage.getItem('token')}`
                 },

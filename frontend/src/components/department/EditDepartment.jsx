@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
+import { useAuth } from '../../context/authContext';
 const EditDepartment = () => {
     const {id} = useParams()
     const [department, setDepartment] = useState([])
     const [depLoading, setDepLoading] = useState(false)
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const { baseUrl } = useAuth();
 
     useEffect(() =>{
         const fetchDepartments = async () =>{
             setDepLoading(true)
             try{
-                const response = await axios.get(`http://localhost:5000/api/department/${id}`,{
+                const response = await axios.get(`${baseUrl}/api/department/${id}`,{
                     headers : {
                         "Authorization" : `Bearer ${localStorage.getItem('token')}`,
                     },
@@ -36,7 +38,7 @@ const EditDepartment = () => {
     const handleSumit = async (e) =>{
         e.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:5000/api/department/${id}`, department, {
+            const response = await axios.put(`${baseUrl}/api/department/${id}`, department, {
                 headers : {
                     "Authorization" : `Bearer ${localStorage.getItem('token')}`
                 }

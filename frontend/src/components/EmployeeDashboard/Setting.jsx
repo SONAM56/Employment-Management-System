@@ -5,6 +5,7 @@ import axios from 'axios';
 const Setting = () => {
     const navigate = useNavigate();
     const {user} = useAuth();
+    const {baseUrl} = useAuth();
     const [setting, setSetting] = useState({
         userId: user._id,
         oldPassword: "",
@@ -23,7 +24,7 @@ const Setting = () => {
             setError("Passwords do not match");
         } else {
             try {
-                const response = await axios.put("http://localhost:5000/api/setting/change-password", setting, {
+                const response = await axios.put(`${baseUrl}/api/setting/change-password`, setting, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     }

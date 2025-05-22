@@ -6,10 +6,10 @@ const userRegister = async () => {
     try {
         const hashPassword = await bcrypt.hash("admin", 10)
         const newUser = new User({
-            name: "Admin",
-            email: "admin@gmail.com",
+            name: "Super Admin",
+            email: "superadmin@gmail.com",
             password: hashPassword,
-            role: "admin"
+            role: "superadmin"
         })
         await newUser.save()
     } catch(error){

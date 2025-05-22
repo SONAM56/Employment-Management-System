@@ -2,17 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { fetchDepartments, getEmployees } from '../../../utils/EmployeeHelper';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../../context/authContext';
 const Add = () => {
     const [salary, setSalary] = useState({
         employeeId: null,
-        basicSalary: 0,
+        salaryperHour: 0,
         allowance: 0,
         deductions: 0,
-        payDate: null,
+        assignDate: null,
     });
     const [departments, setDepartments] = useState(null);
     const [employees, setEmployees] = useState([]);
     const navigate = useNavigate();
+    const {baseUrl} = useAuth();
 
     useEffect(()=> {
         const getDepartments = async () => {
@@ -34,13 +36,13 @@ const Add = () => {
     const handleSubmit = async (e) =>{
         e.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:5000/api/salary/add`, salary, {
+            const response = await axios.post(`${baseUrl}/api/salary/add`, salary, {
                 headers : {
                     Authorization : `Bearer ${localStorage.getItem('token')}`
                 },
             });
             if(response.data.success){
-                navigate('/admin-dashboard/employees');
+                navigate('/admin-dashboard/salary');
             }
         } catch(error){
             if(error.response && !error.response.data.success){
@@ -76,8 +78,8 @@ const Add = () => {
                 </div>
                 {/* Basic Salary */}
                 <div>
-                    <label htmlFor="basicSalary" className='block text-sm font-medium text-gray-700'>Basic Salary</label>
-                    <input type="number" name='basicSalary' onChange={handleChange}  placeholder='basic salary' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required />
+                    <label htmlFor="salaryperHour" className='block text-sm font-medium text-gray-700'>Salary Per Hours</label>
+                    <input type="number" name='salaryperHour' onChange={handleChange}  placeholder='salary per hours' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required />
                 </div> 
                 {/* allowance */}
                 <div>
@@ -91,8 +93,8 @@ const Add = () => {
                 </div>
                 {/*Pay Date */}
                 <div>
-                    <label htmlFor="payDate" className='block text-sm font-medium text-gray-700'>Pay Date</label>
-                    <input type="date" name='payDate' onChange={handleChange} className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required />
+                    <label htmlFor="assignDate" className='block text-sm font-medium text-gray-700'>Assign Date</label>
+                    <input type="date" name='assignDate' onChange={handleChange} className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required />
                 </div>
                 
             </div>

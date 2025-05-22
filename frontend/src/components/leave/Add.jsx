@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/authContext'
 import axios from 'axios'
 const Add = () => {
-    const {user} = useAuth()
+    const {user} = useAuth();
+    const {baseUrl} = useAuth();
     const [leave, setLeave] = useState({
         userId: user._id,
     })
@@ -18,17 +19,17 @@ const Add = () => {
     const handleSubmit = async (e) =>{
         e.preventDefault();
         try{
-            const response = await axios.post(`http://localhost:5000/api/leave/add`, leave, {
+            const response = await axios.post(`${baseUrl}/api/leave/add`, leave, {
                 headers : {
                     "Authorization" : `Bearer ${localStorage.getItem('token')}`,
                 },
             });
             if(response.data.success){
-                navigate("/employee-dashboard/leaves")
+                navigate(`/employee-dashboard/leaves/${user._id}`);
             }
         } catch(error){
             if(error.response && !error.response.data.success){
-            alert(error.response.data.error)
+               alert(error.response.data.error)
             }
         } 
     }

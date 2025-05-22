@@ -1,44 +1,47 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../src/context/authContext";
 
 export const columns = [
     {
-        name:"S No",
+        name: <span className="font-semibold text-gray-800 text-sm uppercase">S No</span>,
         selector: (row) => row.sno,
         width: "70px"
     },
     {
-        name:"Name",
-        selector: (row) => row.name,
-        sortable: true  ,
-        width: "130px"
+        name: <span className="font-semibold text-gray-800 text-sm uppercase">Name</span>,
+        selector: (row) => <span className="text-base">{row.name}</span>,
+        sortable: true,
+        width: "140px"
     },
     {
-        name:"Image",
+        name: <span className="font-semibold text-gray-800 text-sm uppercase">Image</span>,
         selector: (row) => row.profileImage,
         width: '90px'
     },
     {
-        name:"Department",
-        selector: (row) => row.dep_name,
-        width: "120px"
+        name: <span className="font-semibold text-gray-800 text-sm uppercase">Department</span>,
+        selector: (row) => <span className="text-base">{row.dep_name}</span>,
+        width: "140px"
     },
     {
-        name:"DOB",
-        selector: (row) => row.dob,
-        sortable: true ,
-        width: "130px" 
+        name: <span className="font-semibold text-gray-800 text-sm uppercase">DOB</span>,
+        selector: (row) => <span className="font-mono text-base">{row.dob}</span>,
+        sortable: true,
+        width: "130px"
     },
     {
-        name: "Action",
+        name: <span className="font-semibold text-gray-800 text-sm uppercase">Action</span>,
         selector: (row) => row.action,
-        center : "true",
+        center: true,
     },
-]
+];
+
 export const fetchDepartments = async () =>{
-      let departments
+      let departments;
+      const {baseUrl} = useAuth();
       try{
-        const response = await axios.get('http://localhost:5000/api/department',{
+        const response = await axios.get(`${baseUrl}/api/department`,{
           headers : {
             Authorization : `Bearer ${localStorage.getItem('token')}`
           },
@@ -56,9 +59,10 @@ export const fetchDepartments = async () =>{
 
 // employees for salary form
 export const getEmployees = async (id) =>{
+      const {baseUrl} = useAuth()
       let employees;
       try{
-        const responnse = await axios.get(`http://localhost:5000/api/employee/department/${id}`,{
+        const responnse = await axios.get(`${baseUrl}/api/employee/department/${id}`,{
           headers : {
             Authorization : `Bearer ${localStorage.getItem('token')}`,
           },
@@ -78,20 +82,45 @@ export const getEmployees = async (id) =>{
 export const EmployeeButtons = ({Id}) => {
     const navigate = useNavigate();
     return (
-        <div className="flex space-x-4">
-            <button className="px-3 py-1 bg-teal-600 text-white" 
-               onClick={() => navigate(`/admin-dashboard/employees/${Id}`)}
-            >View</button>
+        <div className="flex flex-wrap gap-2">
+            <button
+                className="px-3 py-1 rounded bg-teal-600 text-white font-semibold shadow hover:bg-teal-700 transition"
+                title="View Employee"
+                onClick={() => navigate(`/admin-dashboard/employees/${Id}`)}
+            >
+                View
+            </button>
+            <button
+                className="px-3 py-1 rounded bg-green-600 text-white font-semibold shadow hover:bg-green-700 transition"
+                title="Edit Employee"
+                onClick={() => navigate(`/admin-dashboard/employees/edit/${Id}`)}
+            >
+                Edit
+            </button>
+            <button
+                className="px-3 py-1 rounded font-semibold shadow transition"
+                style={{ backgroundColor: "#f59e42", color: "#fff" }}
+                title="Salary History"
+                onClick={() => navigate(`/admin-dashboard/salary/history/${Id}`)}
+            >
+                Salary
+            </button>
             
-            <button className="px-3 py-1  bg-green-600 text-white "
-               onClick={() => navigate(`/admin-dashboard/employees/edit/${Id}`)}
-            >Edit</button>
-
-            <button className="px-3 py-1  bg-yellow-600 text-white "
-               onClick={() => navigate(`/admin-dashboard/employees/salary/${Id}`)}
-            >Salary</button>
-            <button className="px-3 py-1  bg-red-600 text-white"
-            >Leave</button>
+            <button
+                className="px-3 py-1 rounded bg-red-600 text-white font-semibold shadow hover:bg-red-700 transition"
+                title="Leave Management"
+                onClick={() => navigate(`/admin-dashboard/employees/leaves/${Id}`)}
+            >
+                Leave
+            </button>
+            <button
+                className="px-3 py-1 rounded font-semibold shadow transition"
+                style={{ backgroundColor: "blue", color: "white" }}
+                title="Salary History"
+                onClick={() => navigate(`/admin-dashboard/show-user-task/${Id}`)}
+            >
+                Show Tasks
+            </button>
         </div>
     )
 }

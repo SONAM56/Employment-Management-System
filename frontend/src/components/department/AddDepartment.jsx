@@ -2,12 +2,14 @@ import axios from 'axios';
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useAuth } from '../../context/authContext';
 const AddDepartment = () => {
     const [department, setDepartment] = useState({
         dep_name: '',
         description: ''
     })
     const navigate = useNavigate()
+    const {baseUrl} = useAuth();
     const handleChange = (e) =>{
         const {name, value} = e.target;
         setDepartment({...department, [name]: value})
@@ -15,7 +17,7 @@ const AddDepartment = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios.post('http://localhost:5000/api/department/add', department, {
+            const response = await axios.post(`${baseUrl}/api/department/add`, department, {
                 headers : {
                     "Authorization" : `Bearer ${localStorage.getItem('token')}`
                 }

@@ -71,6 +71,22 @@ const getEmployee = async (req, res) => {
     }
 }
 
+
+
+const getEmployeeByUserId = async (req, res) => {
+    const {userId} = req.params;
+    try {
+        let employee;
+        employee = await Employee.findOne({userId: userId}).select("-password");
+        if(!employee){
+            employee = await Employee.findOne({ userId: userId}).select("-password")
+        }
+        return res.status(200).json({success: true, employee });
+    }catch(error){
+        return res.status(500).json({success: false, error: "get employees server error"});
+    }
+}
+
 const updateEmployee = async (req, res) => {
     try {
         const {id} = req.params;
@@ -104,4 +120,4 @@ const fetchEmployeesByDepId = async (req, res) => {
     }
 } 
 
-export {addEmployee, upload, getEmployees, getEmployee, updateEmployee, fetchEmployeesByDepId}
+export {addEmployee, upload, getEmployees, getEmployee, updateEmployee, fetchEmployeesByDepId, getEmployeeByUserId}
