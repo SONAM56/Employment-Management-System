@@ -1,14 +1,14 @@
 import { Server } from 'socket.io';
 import ActivityLog from './models/ActivityLog.js';
 import Leave from './models/Leave.js';
-
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 let io = null;
 
 const initializeSocket = (server) => {
     if (!io) {
         io = new Server(server, {
             cors: {
-                origin: 'http://localhost:5173',
+                origin: FRONTEND_URL,
                 methods: ['GET', 'POST', 'OPTIONS'],
                 allowedHeaders: ['Authorization'],
                 credentials: true,              // Allow cookies and credentials
