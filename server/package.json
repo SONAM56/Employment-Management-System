@@ -4,6 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "preinstall": "npm uninstall mongoose && npm cache clean --force",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --env-file=.env index.js",
     "start:prod": "node index.js"
