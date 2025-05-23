@@ -1,6 +1,6 @@
 import Employee from "../models/Employee.js"
 import User from "../models/User.js"
-import bcrypt from "bcryptjs"
+import bcrypt from "bcrypt";
 import multer from "multer"
 import path from "path"
 import Department from "../models/Department.js"
