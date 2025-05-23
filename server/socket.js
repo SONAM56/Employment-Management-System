@@ -1,6 +1,8 @@
 import { Server } from 'socket.io';
 import ActivityLog from './models/ActivityLog.js';
 import Leave from './models/Leave.js';
+import dotenv from "dotenv"
+dotenv.config()
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 let io = null;
 
@@ -15,7 +17,7 @@ const initializeSocket = (server) => {
             },
             transports: ['websocket', 'polling'], 
         });
-    
+
         io.on('connection', (socket) => {
             console.log('New client connected:', socket.id);
     
