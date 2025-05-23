@@ -23,7 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "moment-timezone": "^0.5.48",
     "mongodb": "^5.9.2",
-    "mongoose": "^7.5.0",
+    "mongoose": "^7.8.7",
     "mongoose-unique-validator": "^4.0.1",
     "multer": "^2.0.0",
     "node-cron": "^3.0.3",
